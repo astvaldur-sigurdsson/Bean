@@ -8,6 +8,7 @@ Icons:  drop PNGs into the icons/ folder (see icons/README.txt for names).
 
 from __future__ import annotations
 
+import asyncio
 import os
 import random
 import sys
@@ -162,10 +163,19 @@ class Assets:
     def __init__(self, base_dir: str):
         self.base_dir = base_dir
         self.icons: dict[str, pygame.Surface] = {}
-        self.font_lg = pygame.font.SysFont("segoeui", 36, bold=True)
-        self.font_md = pygame.font.SysFont("segoeui", 22, bold=True)
-        self.font_sm = pygame.font.SysFont("segoeui", 16)
-        self.font_sym = pygame.font.SysFont("segoeuiemoji", 36, bold=True)
+        # Try SysFont (works on desktop); fallback to default font (works in browser)
+        def _font(name: str, size: int, bold: bool = False) -> pygame.font.Font:
+            try:
+                f = pygame.font.SysFont(name, size, bold=bold)
+                if f is not None:
+                    return f
+            except Exception:
+                pass
+            return pygame.font.Font(None, size)
+        self.font_lg = _font("segoeui", 36, bold=True)
+        self.font_md = _font("segoeui", 26, bold=True)
+        self.font_sm = _font("segoeui", 18)
+        self.font_sym = _font("segoeuiemoji", 36, bold=True)
 
     def load_icons(self):
         icons_dir = os.path.join(self.base_dir, "icons")
@@ -229,7 +239,7 @@ class SlotGame:
         self.biggest_win = 0.0
 
     # ----- input -----
-    def run(self):
+    async def run(self):
         running = True
         while running:
             dt = self.clock.tick(60) / 1000
@@ -241,9 +251,12 @@ class SlotGame:
                         running = False
                     elif event.key == pygame.K_SPACE:
                         self.try_spin()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    self.try_spin()
             self.update(dt)
             self.draw()
             pygame.display.flip()
+            await asyncio.sleep(0)
         pygame.quit()
 
     # ----- spin flow -----
@@ -472,5 +485,9 @@ def product(xs):
 # Entry
 # ---------------------------------------------------------------------------
 
+async def main():
+    await SlotGame().run()
+
+
 if __name__ == "__main__":
-    SlotGame().run()
+    asyncio.run(main())
