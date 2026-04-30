@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Bean</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin:0; padding:0; height:100%; background:#0e1220; color:#eee;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  #login-wrap { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(ellipse at center, #1a2240 0%, #0a0d18 70%); }
+  .card { background: rgba(20, 26, 44, 0.92); padding: 36px 40px; border-radius: 14px;
+    box-shadow: 0 10px 60px rgba(0,0,0,0.6); width: 320px; border: 1px solid rgba(255,210,80,0.2); }
+  h1 { margin: 0 0 6px 0; color: #ffd250; letter-spacing: 2px; font-size: 28px; text-align:center; }
+  .sub { color:#8893b0; font-size:13px; text-align:center; margin-bottom: 22px; }
+  label { display:block; font-size:12px; color:#aab; margin: 12px 0 4px; text-transform: uppercase; letter-spacing: 1px; }
+  input { width: 100%; box-sizing: border-box; padding: 10px 12px; border-radius: 8px;
+    border: 1px solid #2a3252; background:#0d111e; color:#eee; font-size:15px; outline:none; }
+  input:focus { border-color: #ffd250; }
+  button { margin-top: 22px; width: 100%; padding: 12px; border-radius: 8px; border:0;
+    background: linear-gradient(180deg, #ffd250, #f0a830); color:#1a1208; font-weight: 700;
+    font-size:15px; cursor:pointer; letter-spacing: 1px; }
+  button:hover { filter: brightness(1.08); }
+  .err { color:#ff7080; font-size:13px; min-height: 18px; margin-top:10px; text-align:center; }
+</style>
+</head>
+<body>
+  <div id="login-wrap">
+    <form class="card" id="login" autocomplete="off">
+      <h1>BEAN</h1>
+      <div class="sub">Megaways slot — sign in to play</div>
+      <label for="u">Username</label>
+      <input id="u" name="u" autocomplete="username" autofocus>
+      <label for="p">Password</label>
+      <input id="p" name="p" type="password" autocomplete="current-password">
+      <button type="submit">Enter</button>
+      <div class="err" id="err"></div>
+    </form>
+  </div>
+<script>
+  const USER = "Bean", PASS = "QUACK";
+  const form = document.getElementById("login"), err = document.getElementById("err");
+  if (sessionStorage.getItem("bean_auth") === "1") location.replace("./game.html");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const u = document.getElementById("u").value.trim();
+    const p = document.getElementById("p").value;
+    if (u === USER && p === PASS) {
+      sessionStorage.setItem("bean_auth", "1");
+      location.replace("./game.html");
+    } else { err.textContent = "Wrong username or password."; }
+  });
+</script>
+</body>
+</html>
