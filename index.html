@@ -11,30 +11,43 @@
   input{width:100%;box-sizing:border-box;padding:8px 10px;border-radius:6px;border:1px solid #444;background:#1a1a1a;color:#eee;font-size:14px;margin-top:4px}
   button{margin-top:18px;width:100%;padding:10px;background:#ffd54f;color:#222;border:0;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer}
   button:hover{background:#ffe082}
+  button.alt{background:#5c8cd6;color:#fff;margin-top:10px}
+  button.alt:hover{background:#7aa6e6}
   .err{color:#ff6b6b;font-size:13px;text-align:center;margin-top:10px;min-height:18px}
+  .sub{font-size:12px;color:#888;text-align:center;margin-top:14px}
 </style>
 </head>
 <body>
-<form class="box" onsubmit="return go(event)">
+<form class="box" id="login" onsubmit="return go(event)">
   <h1>Bean</h1>
   <label>User<input id="u" autofocus autocomplete="off"></label>
   <label>Password<input id="p" type="password"></label>
   <button>Enter</button>
   <div class="err" id="e"></div>
 </form>
+<div class="box" id="chooser" style="display:none">
+  <h1>Choose your slot</h1>
+  <button onclick="location.href='./game.html'">Classic</button>
+  <button class="alt" onclick="location.href='./geese/game.html'">Geese</button>
+  <div class="sub">You can come back here any time</div>
+</div>
 <script>
 const USER="Bean", PASS="QUACK";
+function showChooser(){
+  document.getElementById("login").style.display="none";
+  document.getElementById("chooser").style.display="block";
+}
 function go(ev){
   ev.preventDefault();
   if(document.getElementById("u").value===USER && document.getElementById("p").value===PASS){
     sessionStorage.setItem("bean_auth","1");
-    location.replace("./game.html");
+    showChooser();
   } else {
     document.getElementById("e").textContent="Invalid credentials";
   }
   return false;
 }
-if(sessionStorage.getItem("bean_auth")==="1"){location.replace("./game.html");}
+if(sessionStorage.getItem("bean_auth")==="1"){showChooser();}
 </script>
 </body>
 </html>
