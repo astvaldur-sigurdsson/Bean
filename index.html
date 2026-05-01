@@ -27,16 +27,25 @@
 </form>
 <div class="box" id="chooser" style="display:none">
   <h1>Choose your slot</h1>
-  <button onclick="location.href='./game.html'">Classic</button>
-  <button class="alt" onclick="location.href='./sfx/game.html'">Classic with sound</button>
-  <button class="alt" onclick="location.href='./geese/game.html'">Geese</button>
-  <div class="sub">You can come back here any time</div>
+  <button onclick="pick('./game.html')">Classic</button>
+  <button class="alt" onclick="pick('./sfx/game.html')">Classic with sound</button>
+  <button class="alt" onclick="pick('./geese/game.html')">Geese</button>
+  <div class="sub" id="hint">First load takes ~20s while Python loads. Subsequent loads are fast.</div>
+</div>
+<div class="box" id="loading" style="display:none">
+  <h1>Loading…</h1>
+  <div class="sub">Downloading Python runtime — this can take 15-30s on first visit.<br>Game window will appear automatically.</div>
 </div>
 <script>
 const USER="Bean", PASS="QUACK";
 function showChooser(){
   document.getElementById("login").style.display="none";
   document.getElementById("chooser").style.display="block";
+}
+function pick(url){
+  document.getElementById("chooser").style.display="none";
+  document.getElementById("loading").style.display="block";
+  setTimeout(function(){ location.href=url; }, 50);
 }
 function go(ev){
   ev.preventDefault();
